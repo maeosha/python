@@ -3,9 +3,14 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from time import sleep
 import os
-page = 2
 
-count = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+
+def creating_files():
+    if not os.path.isdir("data_set"):
+        os.mkdir("data_set")
+    for i in range(0, 6):
+        if not os.path.isdir(f"data_set/{i} stars"):
+            os.mkdir(f"data_set/{i} stars")
 
 
 def getting_full_review():
@@ -38,6 +43,10 @@ def getting_full_review():
 
         count[int(float(authors_rating) // 1)] += 1
 
+
+page = 2
+
+count = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
 
 while sum(count) <= 6000:
     url = f"https://www.livelib.ru/reviews/~{page}#reviews"

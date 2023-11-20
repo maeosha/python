@@ -13,6 +13,23 @@ def creating_files():
             os.mkdir(f"data_set/{i} stars")
 
 
+def creating_file_name(authors_rating, count):
+    zero = {1: "000", 2: "00", 3: "0", 4: ""}
+    number_of_reviews = count[int(float(authors_rating) // 1)]
+    number_of_stars = int(float(authors_rating) // 1)
+    number_of_zeros = zero[len(str(number_of_reviews))]
+    file_name = f"data_set/{number_of_stars} stars/{number_of_zeros}{number_of_reviews}"
+    return file_name
+
+
+def write_to_fail(book_title, overall_rating, authors_rating, full_review, file_name):
+    with open(file_name, "w+", encoding='utf-8') as file_review:
+        file_review.write(f"Название книги: {book_title}\n")
+        file_review.write(f"Общая оценка: {overall_rating} / 5\n")
+        file_review.write(f"Оценка автора: {authors_rating} / 5\n")
+        file_review.write(f"Отзыв: {full_review}\n")
+
+
 def getting_full_review():
     sleep(5)
     buttons = driver.find_elements(By.CSS_SELECTOR, "a.read-more__link")
@@ -41,7 +58,12 @@ def getting_full_review():
         else:
             full_review = book.find_element(By.ID, "lenta-card__text-review-escaped").text
 
+        file_name = creating_file_name(authors_rating, count)
+        write_to_fail(book_title, overall_rating, authors_rating, full_review, file_name)
         count[int(float(authors_rating) // 1)] += 1
+
+
+creating_files()
 
 
 page = 2
@@ -52,4 +74,5 @@ while sum(count) <= 6000:
     url = f"https://www.livelib.ru/reviews/~{page}#reviews"
     driver = webdriver.Chrome()
     driver.get(url)
+    getting_full_review()
     page += 1

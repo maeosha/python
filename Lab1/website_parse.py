@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from time import sleep
 import os
+import variables
 
 
 def creating_files():
@@ -45,7 +46,7 @@ def getting_full_review():
             authors_rating = book.find_element(By.CSS_SELECTOR, "span.lenta-card__mymark").text
         except NoSuchElementException:
             continue
-        if count[int(float(authors_rating) // 1)] >= 1001:
+        if variables.count[int(float(authors_rating) // 1)] >= 1001:
             continue
 
         if book.find_element(By.CSS_SELECTOR, "div.lenta-card__rating"):
@@ -58,21 +59,16 @@ def getting_full_review():
         else:
             full_review = book.find_element(By.ID, "lenta-card__text-review-escaped").text
 
-        file_name = creating_file_name(authors_rating, count)
+        file_name = creating_file_name(authors_rating, variables.count)
         write_to_fail(book_title, overall_rating, authors_rating, full_review, file_name)
-        count[int(float(authors_rating) // 1)] += 1
+        variables.count[int(float(authors_rating) // 1)] += 1
 
 
 creating_files()
 
 
-page = 2
-
-count = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
-
-while sum(count) <= 6000:
-    url = f"https://www.livelib.ru/reviews/~{page}#reviews"
+while sum(variables.count) <= 6000:
     driver = webdriver.Chrome()
-    driver.get(url)
+    driver.get(variables.url)
     getting_full_review()
-    page += 1
+    variables.page += 1

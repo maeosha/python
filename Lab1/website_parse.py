@@ -9,6 +9,12 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
 
+def _logging(page: int):
+    if page == 2:
+        print("The 2'nd page is being parsed")
+    else:
+        print(f"The {page}'th page is being parsed")
+
 def creating_files(dir_name) -> void:
     """сreates a dataset using the os library"""
     try:
@@ -19,6 +25,7 @@ def creating_files(dir_name) -> void:
     for i in range(0, 6):
         if not os.path.isdir(os.path.join(dir_name, f"{i} stars")):
             os.mkdir(os.path.join(dir_name, f"{i} stars"))
+    print(f"The {dir_name} root file was created!")
 
 
 def creating_file_name(authors_rating: float, count: Dict[int, int], dir_name: str) -> str:
@@ -81,6 +88,7 @@ def start_parse(page: int, count: Dict[int, int], url: str, dir_name: str, max_t
     creating_files(dir_name)
 
     while sum(count) <= max_txt_files * 6:
+        _logging(page)
         url = f"{url[:-1]}{page}"
         driver: WebDriver = webdriver.Chrome()
         driver.get(url)

@@ -9,12 +9,15 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
 
+logging.basicConfig(level=logging.INFO)
+
+
 def _logging(page: int) -> void:
     """Project logging"""
     if page == 2:
-        print("The 2'nd page is being parsed")
+        logging.info("The 2'nd page is being parsed")
     else:
-        print(f"The {page}'th page is being parsed")
+        logging.info(f"The {page}'th page is being parsed")
 
 
 def creating_files(dir_name) -> void:
@@ -27,7 +30,7 @@ def creating_files(dir_name) -> void:
     for i in range(0, 6):
         if not os.path.isdir(os.path.join(dir_name, f"{i} stars")):
             os.mkdir(os.path.join(dir_name, f"{i} stars"))
-    print(f"The {dir_name} root file was created!")
+    logging.info(f"The {dir_name} root file was created!")
 
 
 def creating_file_name(authors_rating: float, count: Dict[int, int], dir_name: str) -> str:
@@ -85,8 +88,13 @@ def getting_full_review(driver: WebDriver, count: Dict[int, int], dir_name: str,
         count[int(float(authors_rating))] += 1
 
 
-def start_parse(page: int, count: Dict[int, int], url: str, dir_name: str, max_txt_files: int) -> void:
+def start_parse(count: Dict[int, int], my_variables) -> void:
     """the beginning of parsing"""
+    page = my_variables.page
+    url = my_variables.url
+    dir_name = my_variables.dir_name
+    max_txt_files = my_variables.max_txt_files
+
     creating_files(dir_name)
 
     while sum(count) <= max_txt_files * 6:
@@ -96,4 +104,3 @@ def start_parse(page: int, count: Dict[int, int], url: str, dir_name: str, max_t
         driver.get(url)
         getting_full_review(driver, count, dir_name, max_txt_files)
         page += 1
-

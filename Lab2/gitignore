@@ -162,3 +162,5 @@ cython_debug/
 /unified_dataset
 /random_dataset
 data_set/
+new_data/
+random_data/

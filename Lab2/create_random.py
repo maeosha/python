@@ -6,11 +6,13 @@ import shutil
 import void
 
 
+logging.basicConfig(level=logging.INFO)
+
 general_list: list = list(range(0, 10000))
 
 
-def get_file_path(data_dir_name: str, random_dir_name: str, random_csv_name: str) -> void:
-    """getting file paths and the number of stars"""
+def create_random(data_dir_name: str, random_dir_name: str, random_csv_name: str) -> void:
+    """getting file paths and the number of stars and calling all file functions"""
     file_info_list: list = []
     for stars in os.listdir(data_dir_name):
         for file_name_txt in os.listdir(os.path.join(data_dir_name, stars)):
@@ -22,7 +24,7 @@ def get_file_path(data_dir_name: str, random_dir_name: str, random_csv_name: str
             general_list.remove(random_element)
             file_info_list.append([absolute_path_file, path_random_file, stars[0]])
             copy_files(path_copied_file, path_random_file)
-            make_random_csv(random_csv_name, file_info_list)
+    make_random_csv(random_csv_name, file_info_list)
 
 
 def create_random_dir(random_dir_name: str) -> void:
@@ -31,6 +33,8 @@ def create_random_dir(random_dir_name: str) -> void:
         os.mkdir(os.path.join(random_dir_name))
     except NameError:
         logging.warning("Error! A file with this name already exists!", NameError)
+
+    logging.info(f"{random_dir_name} successfully created!")
 
 
 def copy_files(path_copied_file: str, path_random_file: str) -> void:
@@ -45,3 +49,4 @@ def make_random_csv(random_csv_name: str, file_info_list: list) -> void:
         write.writerow(["Absolute path", "Relative path", "Number of stars"])
         write.writerows(file_info_list)
 
+    logging.info(f"{random_csv_name} successfully created!")

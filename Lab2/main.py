@@ -43,21 +43,13 @@ parser.add_argument('--random_dir_name',
 if __name__ == "__main__":
     my_variables = parser.parse_args()
 
-    csv_name:        str = my_variables.csv_name
-    new_csv_name:    str = my_variables.new_csv_name
-    random_csv_name: str = my_variables.random_csv_name
+    create_csv(*(vars(my_variables).values()))
 
-    data_dir_name:   str = my_variables.data_dir_name
-    new_dir_name:    str = my_variables.new_dir_name
-    random_dir_name: str = my_variables.random_dir_name
+    create_copy_dir(*(vars(my_variables).values()))
+    create_copy(*(vars(my_variables).values()))
 
-    create_csv(data_dir_name, csv_name)
-
-    create_copy_dir(new_dir_name)
-    create_copy(data_dir_name, new_dir_name, new_csv_name)
-
-    create_random_dir(random_dir_name)
-    create_random(data_dir_name, random_dir_name, random_csv_name)
+    create_random_dir(*(vars(my_variables).values()))
+    create_random(*(vars(my_variables).values()))
 
     file_iter = FileIterator("data.csv", 2)
     for review in file_iter:

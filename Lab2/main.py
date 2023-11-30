@@ -4,6 +4,7 @@ from create_copy import create_copy
 from create_copy import create_copy_dir
 from create_random import create_random
 from create_random import create_random_dir
+from file_iterator import FileIterator
 
 
 parser = argparse.ArgumentParser()
@@ -57,3 +58,7 @@ if __name__ == "__main__":
 
     create_random_dir(random_dir_name)
     create_random(data_dir_name, random_dir_name, random_csv_name)
+
+    file_iter = FileIterator("data.csv", 2)
+    for review in file_iter:
+        print(review)

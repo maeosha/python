@@ -1,7 +1,7 @@
 import csv
 
 
-class FailIterator:
+class FileIterator:
     """iteration class"""
     def __init__(self, path_csv: str, number_of_star: int):
         """initialization of the iterated class, where data is read from a csv file

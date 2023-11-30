@@ -88,13 +88,8 @@ def getting_full_review(driver: WebDriver, count: Dict[int, int], dir_name: str,
         count[int(float(authors_rating))] += 1
 
 
-def start_parse(count: Dict[int, int], my_variables) -> void:
+def start_parse(count: dict[int, int], page: int, url: str, dir_name: str, max_txt_files) -> void:
     """the beginning of parsing"""
-    page = my_variables.page
-    url = my_variables.url
-    dir_name = my_variables.dir_name
-    max_txt_files = my_variables.max_txt_files
-
     creating_files(dir_name)
 
     while sum(count) <= max_txt_files * 6:

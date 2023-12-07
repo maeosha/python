@@ -2,7 +2,6 @@ import argparse
 from content import start_work
 
 
-
 parser = argparse.ArgumentParser()
 
 
@@ -14,27 +13,27 @@ parser.add_argument('--data_dir_name',
 parser.add_argument('--new_dir_name',
                     type=str,
                     default="new_data",
-                    help='the name of the file where the contents of the old file will be copied')
+                    help='the name of the fail where the contents of the old fail will be copied')
 
 parser.add_argument('--new_csv_name',
                     type=str,
                     default="new_data.csv",
-                    help='csv file of the new copy of the directory')
+                    help='csv fail of the new copy of the directory')
 
 parser.add_argument('--number_of_stars',
                     type=int,
                     default=0,
-                    help="getting file paths with this number of stars(default = 0)"
+                    help="getting fail paths with this number of stars(default = 0)"
                     )
 
 parser.add_argument('--processing_method',
                     type=int,
-                    default=4,
+                    default=3,
                     help="creating one of this(default = 1):"
-                         " 1 - a date annotation file,"
-                         " 2 - a copy of the date with an annotation file,"
-                         " 3 - a copy of the date with random names and an annotation file,"
-                         " 4 - getting paths to files with certain stars"
+                         " 1 - a date annotation fail,"
+                         " 2 - a copy of the date with an annotation fail,"
+                         " 3 - a copy of the date with random names and an annotation fail,"
+                         " 4 - getting paths to fails with certain stars"
                     )
 
 

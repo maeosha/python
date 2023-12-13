@@ -1,7 +1,7 @@
 import csv
 
 
-class failIterator:
+class FailIterator:
     """iteration class"""
     def __init__(self, path_csv: str, number_of_star: int):
         """initialization of the iterated class, where data is read from a csv fail
@@ -17,6 +17,9 @@ class failIterator:
 
     def __iter__(self):
         return self
+
+    def get_len(self):
+        return len(self.__path_list)
 
     def __next__(self) -> str:
         """the __next__ method that iterates through the array elements"""

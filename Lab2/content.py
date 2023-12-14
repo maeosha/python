@@ -5,67 +5,67 @@ import shutil
 from enum import Enum
 import void
 import random
-from fail_iterator import failIterator
+from file_iterator import fileIterator
 
 
 logging.basicConfig(level=logging.INFO)
 
 
 class ProcessingMethod(Enum):
-    functions1 = 1
-    functions2 = 2
-    functions3 = 3
-    functions4 = 4
+    annotation = 1
+    copy_data = 2
+    random_data = 3
+    iterator = 4
 
 
-def fail_path_information(data_dir_name: str, new_dir_name: str, processing_method: int, random_list: list) -> list:
-    """getting fail paths and the number of stars and calling all fail functions"""
-    fail_info_list: list = []
-    path_new_fail: list = [""]
+def file_path_information(data_dir_name: str, new_dir_name: str, processing_method: int, random_list: list) -> list:
+    """getting file paths and the number of stars and calling all file functions"""
+    file_info_list: list = []
+    path_new_file: list = [""]
     for stars in os.listdir(data_dir_name):
-        for fail_name_txt in os.listdir(os.path.join(data_dir_name, stars)):
-            path_copied_fail: str = os.path.join(data_dir_name, stars, fail_name_txt)
+        for file_name_txt in os.listdir(os.path.join(data_dir_name, stars)):
+            path_copied_file: str = os.path.join(data_dir_name, stars, file_name_txt)
+            match processing_method:
+                case ProcessingMethod.annotation.value:
+                    path_new_file[0] = os.path.join(new_dir_name, stars, file_name_txt)
+                case ProcessingMethod.copy_data.value:
+                    path_new_file[0] = os.path.join(new_dir_name, stars + "_" + file_name_txt)
+                case ProcessingMethod.random_data.value:
+                    random_element: int = random.choice(random_list)
+                    path_new_file[0] = os.path.join(new_dir_name, f"{random_element}")
+                    random_list.remove(random_element)
 
-            if processing_method == ProcessingMethod.functions1.value:
-                path_new_fail[0] = os.path.join(new_dir_name, stars, fail_name_txt)
-            if processing_method == ProcessingMethod.functions2.value:
-                path_new_fail[0] = os.path.join(new_dir_name, stars + "_" + fail_name_txt)
-            if processing_method == ProcessingMethod.functions3.value:
-                random_element: int = random.choice(random_list)
-                path_new_fail[0] = os.path.join(new_dir_name, f"{random_element}")
-                random_list.remove(random_element)
+            absolute_path_file: str = os.path.abspath(path_new_file[0])
 
-            absolute_path_fail: str = os.path.abspath(path_new_fail[0])
-
-            fail_info_list.append([absolute_path_fail, path_new_fail[0], stars[0], path_copied_fail])
-    return fail_info_list
+            file_info_list.append([absolute_path_file, path_new_file[0], stars[0], path_copied_file])
+    return file_info_list
 
 
 def create_dir(new_dir_name: str) -> void:
     try:
         os.mkdir(os.path.join(new_dir_name))
     except NameError:
-        logging.warning("Error! A fail with this name already exists!", NameError)
+        logging.warning("Error! A file with this name already exists!", NameError)
 
     logging.info(f"{new_dir_name} successfully created!")
 
 
-def copy_fails(path_copied_fails: list, path_new_fails: list) -> void:
-    """copying txt fails from the old directory to the new one"""
-    for i in range(len(path_copied_fails)):
-        if os.path.isfile(path_copied_fails[i]) == 0:
+def copy_files(path_copied_files: list, path_new_files: list) -> void:
+    """copying txt files from the old directory to the new one"""
+    for i in range(len(path_copied_files)):
+        if os.path.isfile(path_copied_files[i]) == 0:
             logging.warning("The wrong item has been selected!", NameError)
-        shutil.copy(path_copied_fails[i], path_new_fails[i])
+        shutil.copy(path_copied_files[i], path_new_files[i])
 
 
-def make_csv(csv_name: str, fail_info_list: list) -> void:
-    """creating a csv fail for a new directory"""
+def make_csv(csv_name: str, file_info_list: list) -> void:
+    """creating a csv file for a new directory"""
     csv_list: list = []
-    for info in fail_info_list:
+    for info in file_info_list:
         csv_list.append([info[i] for i in range(3)])
 
-    with open(os.path.join(csv_name), "w", newline="", encoding='utf-8') as fail:
-        write = csv.writer(fail)
+    with open(os.path.join(csv_name), "w", newline="", encoding='utf-8') as file:
+        write = csv.writer(file)
         write.writerow(["Absolute path", "Relative path", "Number of stars"])
         write.writerows(csv_list)
 
@@ -75,23 +75,23 @@ def make_csv(csv_name: str, fail_info_list: list) -> void:
 def start_work(random_list: list, data_dir_name: str, new_dir_name: str, csv_name: str, number_of_stars: int,
                processing_method: int) -> void:
     """Incredibly, the function is starting to work"""
-    fail_info_list: list = fail_path_information(data_dir_name, new_dir_name, processing_method, random_list)
+    file_info_list: list = file_path_information(data_dir_name, new_dir_name, processing_method, random_list)
 
     if processing_method > 4 or processing_method < 1:
         logging.warning("The wrong item has been selected!", NameError)
+    match processing_method:
+        case ProcessingMethod.annotation.value:
+            make_csv(csv_name, file_info_list)
+        case ProcessingMethod.copy_data.value | ProcessingMethod.random_data.value:
+            create_dir(new_dir_name)
+            path_copied_files: list = [info[3] for info in file_info_list]
+            path_new_files: list = [info[1] for info in file_info_list]
+            copy_files(path_copied_files, path_new_files)
+            make_csv(csv_name, file_info_list)
+        case ProcessingMethod.iterator.value:
+            if os.path.isfile(csv_name) == 0:
+                logging.warning("The wrong item has been selected!", NameError)
 
-    if processing_method == ProcessingMethod.functions1.value:
-        make_csv(csv_name, fail_info_list)
-    if processing_method == ProcessingMethod.functions2.value or processing_method == ProcessingMethod.functions3.value:
-        create_dir(new_dir_name)
-        path_copied_fails: list = [info[3] for info in fail_info_list]
-        path_new_fails: list = [info[1] for info in fail_info_list]
-        copy_fails(path_copied_fails, path_new_fails)
-        make_csv(csv_name, fail_info_list)
-    if processing_method == ProcessingMethod.functions4.value:
-        if os.path.isfile(csv_name) == 0:
-            logging.warning("The wrong item has been selected!", NameError)
-
-        fail_iter = failIterator(csv_name, number_of_stars)
-        for review in fail_iter:
-            logging.info(review)
+            file_iter = fileIterator(csv_name, number_of_stars)
+            for review in file_iter:
+                logging.info(review)

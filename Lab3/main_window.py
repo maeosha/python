@@ -1,7 +1,17 @@
 import sys
 import os
 
-from PyQt6.QtWidgets import *
+from PyQt6.QtWidgets import (QMainWindow,
+                             QPushButton,
+                             QListView,
+                             QLabel,
+                             QTextBrowser,
+                             QMenuBar,
+                             QMenu,
+                             QMessageBox,
+                             QFileDialog,
+                             QInputDialog,
+                             QApplication)
 from enum import Enum
 from multiprocessing import Process
 
@@ -64,14 +74,11 @@ class IterWindow(QMainWindow):
         path_list_full = QListView(self)
         path_list_full.setGeometry(2, 24, 836, 71)
 
-        text_list_full = QListView(self)
-        text_list_full.setGeometry(2, 98, 836, 311)
+        self.text_list_full = QTextBrowser(self)
+        self.text_list_full.setGeometry(2, 98, 836, 311)
 
-        path_list = QListWidget(self)
+        path_list = QTextBrowser(self)
         path_list.setGeometry(2, 22, 836, 30)
-
-        text_list = QListWidget(self)
-        text_list.setGeometry(2, 98, 836, 34)
 
         path_label_info = QLabel(self)
         path_label_info.setGeometry(2, 22, 836, 30)
@@ -79,11 +86,6 @@ class IterWindow(QMainWindow):
         path_label_info.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         path_label_info.setMargin(6)
 
-        text_label_info = QLabel(self)
-        text_label_info.setGeometry(2, 99, 836, 32)
-        text_label_info.setText("The text of the rewiew:")
-        text_label_info.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
-        text_label_info.setMargin(6)
 
         self.path_label = QLabel(self)
         self.path_label.setGeometry(2, 51, 836, 43)
@@ -91,11 +93,6 @@ class IterWindow(QMainWindow):
         self.path_label.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
         self.path_label.setMargin(6)
 
-        self.text_label = QLabel(self)
-        self.text_label.setGeometry(2, 131, 836, 277)
-        self.text_label.setText("")
-        self.text_label.setStyleSheet("font: 10pt \"MS Shell Dlg 2\";")
-        self.text_label.setMargin(6)
 
         menubar = QMenuBar(self)
         self.setMenuBar(menubar)
@@ -130,7 +127,7 @@ class IterWindow(QMainWindow):
             self.path_label.setText(fail_info[0])
             for line in fail_info[1]:
                 text += line
-            self.text_label.setText(text)
+            self.text_list_full.setText(text)
             self.count[stars] += 1
 
     def go_back(self):

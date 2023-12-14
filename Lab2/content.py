@@ -79,20 +79,21 @@ def make_csv(csv_name: str, fail_info_list: list) -> void:
 def start_work(random_list: list, data_dir_name: str, new_dir_name: str, csv_name: str,
                processing_method: int) -> void:
     """Incredibly, the function is starting to work"""
-    if processing_method > 4 or processing_method < 1:
+    if processing_method > 3 or processing_method < 1:
         logging.warning("The wrong item has been selected!", NameError)
+    match processing_method:
+        case ProcessingMethod.annotation.value:
+            fail_info_list: list = fail_path_information(data_dir_name, new_dir_name, processing_method, random_list)
+            make_csv(csv_name, fail_info_list)
 
-    if processing_method == ProcessingMethod.functions1.value:
-        fail_info_list: list = fail_path_information(data_dir_name, new_dir_name, processing_method, random_list)
-        make_csv(csv_name, fail_info_list)
+        case ProcessingMethod.default_copy.value | ProcessingMethod.random_copy.value:
 
-    if processing_method == ProcessingMethod.functions2.value or processing_method == ProcessingMethod.functions3.value:
-        fail_info_list: list = fail_path_information(data_dir_name, new_dir_name, processing_method, random_list)
-        create_dir(new_dir_name)
-        path_copied_fails: list = [info[3] for info in fail_info_list]
-        path_new_fails: list = [info[1] for info in fail_info_list]
-        copy_fails(path_copied_fails, path_new_fails)
-        make_csv(csv_name, fail_info_list)
+            fail_info_list: list = fail_path_information(data_dir_name, new_dir_name, processing_method, random_list)
+            create_dir(new_dir_name)
+            path_copied_fails: list = [info[3] for info in fail_info_list]
+            path_new_fails: list = [info[1] for info in fail_info_list]
+            copy_fails(path_copied_fails, path_new_fails)
+            make_csv(csv_name, fail_info_list)
 
 
 def next_iter(csv_name: str, number_of_stars: int, count: int) -> list:

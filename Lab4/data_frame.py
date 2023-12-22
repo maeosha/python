@@ -103,4 +103,6 @@ if __name__ == "__main__":
                         type=int)
 
     args = parser.parse_args()
-    df = start(*(vars(args).values()))
+    df = create_data_frame("data_csv")
+    df.to_csv("data_frames", index=False)
+
